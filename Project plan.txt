@@ -1,0 +1,32 @@
+Project plan 
+
+customer churn
+
+Data cleaning notes
+
+Problem
+
+Multiple lines has entry where it says no phone serivce but in phone service col it says yes.
+I shall let phone service take precident. Since the latter is a subfield. i will trust that the parent put the correct one
+
+
+For online_security I make the same argument. internet service is the main field and if they have security is a subfield. I made a check to see if they also have tv or other tools that make no internet nonsencial
+
+
+
+-Imputation
+Get model structure okay first
+
+
+Modeling notes
+-Model selection
+-StratifiedKfold is something i can use	
+-all models use my custom scorer but this can be changd
+
+Models to try: 
+-Logit #penatly , base,l1,l2,elastic-
+-KNeighbors
+-Ensemble Classifiers(RF)
+-SVC
+
+after models are done I will rerun with imputation 

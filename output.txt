@@ -1,0 +1,232 @@
+0        CUST00001
+1        CUST00002
+2        CUST00003
+3        CUST00004
+4        CUST00005
+           ...    
+69995    CUST69996
+69996    CUST69997
+69997    CUST69998
+69998    CUST69999
+69999    CUST70000
+Name: customerID, Length: 70000, dtype: object,0          Male
+1          Male
+2        Female
+3        Female
+4          Male
+          ...  
+69995      Male
+69996      Male
+69997      Male
+69998      Male
+69999    Female
+Name: gender, Length: 70000, dtype: object,0          0
+1          1
+2         No
+3          0
+4        Yes
+        ... 
+69995      1
+69996      0
+69997      0
+69998      0
+69999      0
+Name: SeniorCitizen, Length: 70000, dtype: object,0         No
+1        Yes
+2         No
+3         No
+4        Yes
+        ... 
+69995    Yes
+69996    Yes
+69997    NaN
+69998     No
+69999     No
+Name: Partner, Length: 70000, dtype: object,0        Yes
+1         No
+2         No
+3        Yes
+4        Yes
+        ... 
+69995    Yes
+69996    NaN
+69997     No
+69998     No
+69999     No
+Name: Dependents, Length: 70000, dtype: object,0         3.0
+1         2.0
+2        42.0
+3        40.0
+4        17.0
+         ... 
+69995    30.0
+69996    15.0
+69997    20.0
+69998    21.0
+69999     3.0
+Name: tenure, Length: 70000, dtype: float64,0        Yes
+1        Yes
+2        Yes
+3        Yes
+4        Yes
+        ... 
+69995    Yes
+69996    Yes
+69997    Yes
+69998    Yes
+69999    Yes
+Name: PhoneService, Length: 70000, dtype: object,0        Yes
+1        Yes
+2        Yes
+3        Yes
+4        NaN
+        ... 
+69995    Yes
+69996    Yes
+69997     No
+69998     No
+69999    Yes
+Name: MultipleLines, Length: 70000, dtype: object,0                 No
+1                DSL
+2                DSL
+3        Fiber optic
+4        Fiber optic
+            ...     
+69995    Fiber optic
+69996    Fiber optic
+69997            DSL
+69998    Fiber optic
+69999             No
+Name: InternetService, Length: 70000, dtype: object,0        No internet service
+1                         No
+2                         No
+3                         No
+4                        Yes
+                ...         
+69995                    Yes
+69996                     No
+69997                    Yes
+69998                     No
+69999    No internet service
+Name: OnlineSecurity, Length: 70000, dtype: object,0        No internet service
+1                         No
+2                        Yes
+3                         No
+4                         No
+                ...         
+69995                    Yes
+69996                     No
+69997                     No
+69998                    Yes
+69999    No internet service
+Name: OnlineBackup, Length: 70000, dtype: object,0        No internet service
+1        No internet service
+2                         No
+3                        Yes
+4                        Yes
+                ...         
+69995                     No
+69996                     No
+69997                     No
+69998                     No
+69999    No internet service
+Name: DeviceProtection, Length: 70000, dtype: object,0        No internet service
+1                        Yes
+2                        NaN
+3                         No
+4                         No
+                ...         
+69995                    Yes
+69996                     No
+69997                     No
+69998                     No
+69999    No internet service
+Name: TechSupport, Length: 70000, dtype: object,0        No internet service
+1                        NaN
+2                        Yes
+3                         No
+4        No internet service
+                ...         
+69995                     No
+69996                     No
+69997                    NaN
+69998                    Yes
+69999    No internet service
+Name: StreamingTV, Length: 70000, dtype: object,0        No internet service
+1                         No
+2                        Yes
+3        No internet service
+4                         No
+                ...         
+69995                     No
+69996                     No
+69997                     No
+69998    No internet service
+69999    No internet service
+Name: StreamingMovies, Length: 70000, dtype: object,0        Month-to-month
+1              One year
+2        Month-to-month
+3        Month-to-month
+4              Two year
+              ...      
+69995          Two year
+69996    Month-to-month
+69997    Month-to-month
+69998    Month-to-month
+69999    Month-to-month
+Name: Contract, Length: 70000, dtype: object,0         No
+1        Yes
+2         No
+3         No
+4        Yes
+        ... 
+69995     No
+69996    Yes
+69997    Yes
+69998    Yes
+69999     No
+Name: PaperlessBilling, Length: 70000, dtype: object,0                     Mailed check
+1        Bank transfer (automatic)
+2                 Electronic check
+3                 Electronic check
+4                 Electronic check
+                   ...            
+69995             Electronic check
+69996    Bank transfer (automatic)
+69997                 Mailed check
+69998             Electronic check
+69999             Electronic check
+Name: PaymentMethod, Length: 70000, dtype: object,0        68.61
+1        23.15
+2        42.63
+3        75.04
+4        22.38
+         ...  
+69995    74.85
+69996    40.67
+69997    29.44
+69998    46.77
+69999    72.41
+Name: MonthlyCharges, Length: 70000, dtype: float64,0         205.83
+1           46.3
+2        1790.46
+3         3001.6
+4         380.46
+          ...   
+69995     2245.5
+69996     610.05
+69997      588.8
+69998     982.17
+69999     217.23
+Name: TotalCharges, Length: 70000, dtype: object,0        Yes
+1         No
+2        Yes
+3         No
+4        Yes
+        ... 
+69995     No
+69996    Yes
+69997     No
+69998     No
+69999    Yes
+Name: Churn, Length: 70000, dtype: object

@@ -1,0 +1,1 @@
+{"params": {"svc__kernel": "poly", "svc__gamma": 0.01, "svc__degree": 2, "svc__coef0": 1, "svc__C": 0.1}}

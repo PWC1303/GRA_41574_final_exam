@@ -1,0 +1,1 @@
+{"params": {"svc__kernel": "rbf", "svc__gamma": 0.01, "svc__C": 0.1}}

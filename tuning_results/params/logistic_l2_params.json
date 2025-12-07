@@ -1,0 +1,1 @@
+{"params": {"Cs": 10, "class_weight": null, "cv": 10, "dual": false, "fit_intercept": true, "intercept_scaling": 1.0, "l1_ratios": null, "max_iter": 1000, "multi_class": "deprecated", "n_jobs": null, "penalty": "l2", "random_state": 33, "refit": true, "scoring": "roc_auc", "solver": "liblinear", "tol": 0.0001, "verbose": 2}, "best_C": 0.000774263682681127}
