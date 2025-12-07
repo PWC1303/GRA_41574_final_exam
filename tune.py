@@ -25,10 +25,15 @@ def save_json(fname,obj):
 def main():
     parser = argparse.ArgumentParser(prog='ProgramName',description='What the program does',epilog='Text at the bottom of help')
     parser.add_argument("--model", type=str, default="logm_l1")
+    parser.add_argument("--dset", type=str, default="red")
     parser.add_argument("--cv", type = int, default=10, help ="Choose cv")
     parser.add_argument("--svc_type",type=str,default="rbf",   help= "choose between poly and rbf kernel")
     args = parser.parse_args()
-    df = pd.read_csv("data/wine_red_encoded.csv")
+    if args.dset =="white":
+         data = "white"
+    else:
+         data = "red"
+    df = pd.read_csv(f"data/{data}quality_encoded.csv")
     y = np.array(df["lq"])
     X = np.array(df.drop(columns= ["quality","lq"]))
     X_tr,X_te,y_tr,y_te = train_test_split(X,y,test_size=0.3,random_state=33)
