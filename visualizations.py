@@ -9,14 +9,12 @@ import argparse
 
 def main():
    parser = argparse.ArgumentParser(prog='ProgramName',description='What the program does',epilog='Text at the bottom of help')
-   parser.add_argument("--dset",type =str,default="red",help = "Select dset for KS, visualizing distribution of signficant features, and doing KDE")
+   parser.add_argument("--dset",type =str,default="white",help = "Select dset for KS, visualizing distribution of signficant features, and doing KDE")
    args = parser.parse_args()
    df = pd.read_csv(f"data\wine_{args.dset}_encoded.csv")
    features = [col for col in df.columns if col  != "lq" and col !="quality" ]
 
-
-   #__________________Kolmogorov–Smirnov test____________________________________________________________-
-
+   #__________________Kolmogorov–Smirnov test______________________________________
    ks_results = {}
    for col in features:
       x1 = df.loc[df["lq"] == 1, col]
@@ -27,13 +25,13 @@ def main():
 
    ks_df = pd.DataFrame(ks_results).T.sort_values("p_value")
    alpha = 0.05
-   m = len(features)  # number of tests
+   m = len(features)  
    ks_df["p_bonf"] = ks_df["p_value"] * m
    ks_df["signif_bonf"] = ks_df["p_bonf"] < alpha
    print(ks_df)
    
    
-   #______________________Visualzing distributions of Significant features_________________________________________________________
+   #______________________Visualzing distributions of Significant features__________
    signif_features = ks_df.index[ks_df["signif_bonf"]].tolist()
    df.loc[df["lq"] == 1, signif_features].hist(bins=50, figsize=(16, 12))
    plt.tight_layout()
@@ -45,7 +43,7 @@ def main():
    plt.close()
 
 
-   #______________________KDE on Significant features_________________________________________________________
+   #______________________KDE on Significant features_________________________________
    n = len(signif_features)
    ncols = 2
    nrows = (n + 1) // ncols

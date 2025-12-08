@@ -1,0 +1,1 @@
+{"alpha": 0.1, "test_recall": 0.7058823529411765, "testing_accuracy": 0.42916666666666664, "test_roc_auc": 0.6878414432727735, "test_precision": 0.042704626334519574, "test_f1": 0.08053691275167785, "test_confusion_matrix": [[194, 269], [5, 12]]}
