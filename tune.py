@@ -7,7 +7,7 @@ import argparse
 from sklearn.linear_model import LogisticRegression,LogisticRegressionCV
 
 from sklearn.model_selection import train_test_split,RandomizedSearchCV,GridSearchCV
-from utils.treshold_tuner import tune_alpha_f1
+from utils.alpha_plot import plot_accuracy_vs_threshold,plot_recall_vs_threshold,plot_recall_accuracy
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
@@ -72,10 +72,13 @@ def main():
         file_name_model   = f"tuning_results/models/{prefix}_{args.model}.pkl"
 
         y_val_prob = model.predict_proba(X_val)[:, 1]
-        alpha_opt, metrics = tune_alpha_f1(y_val, y_val_prob)
-        print("best_alpha:", alpha_opt)
-        print("Metrics at best alpha:", metrics)
-        save_json(file_name_params,{"params": params, "best_C": best_c,"best_alpha":alpha_opt})
+        
+        
+        plot_accuracy_vs_threshold(args.model,y_val,y_val_prob)
+        plot_recall_vs_threshold(args.model,y_val,y_val_prob)
+        plot_recall_accuracy(args.model,y_val,y_val_prob)
+      
+        save_json(file_name_params,{"params": params, "best_C": best_c})
         save_json(file_name_results, {"cv_pr_auc": cv_pr_auc})
         joblib.dump(model, file_name_model)
         print(f"Fitted on dataset wine_{args.dset}_encoded, params, cv_pr_auc and model.pkl saved for {args.model}")
@@ -99,10 +102,12 @@ def main():
         file_name_model   = f"tuning_results/models/{prefix}_{args.model}.pkl"
       
         y_val_prob = model.predict_proba(X_val)[:, 1]
-        alpha_opt, metrics = tune_alpha_f1(y_val, y_val_prob)
-        print("best_alpha:", alpha_opt)
-        print("Metrics at best alpha:", metrics)
-        save_json(file_name_params,{"params": params, "best_C": best_c,"best_alpha":alpha_opt})
+        
+        plot_accuracy_vs_threshold(args.model,y_val,y_val_prob)
+        plot_recall_vs_threshold(args.model,y_val,y_val_prob)
+        plot_recall_accuracy(args.model,y_val,y_val_prob)
+      
+        save_json(file_name_params,{"params": params, "best_C": best_c})
         save_json(file_name_results, {"cv_pr_auc": cv_pr_auc})
         joblib.dump(model, file_name_model)
         print(f"Fitted on dataset wine_{args.dset}_encoded, params, cv_pr_auc and model.pkl saved for {args.model}")
@@ -127,10 +132,13 @@ def main():
         file_name_results = f"tuning_results/cv_pr_auc/{prefix}_{args.model}_cv_pr_auc.json"
         file_name_model   = f"tuning_results/models/{prefix}_{args.model}.pkl"
         y_val_prob = model.predict_proba(X_val)[:, 1]
-        alpha_opt, metrics = tune_alpha_f1(y_val, y_val_prob)
-        print("best_alpha:", alpha_opt)
-        print("Metrics at best alpha:", metrics)
-        save_json(file_name_params,{"params": params, "best_C": best_c,"l1_ratio":l1_ratio,"best_alpha":alpha_opt})
+        
+        
+        plot_accuracy_vs_threshold(args.model,y_val,y_val_prob)
+        plot_recall_vs_threshold(args.model,y_val,y_val_prob)
+        plot_recall_accuracy(args.model,y_val,y_val_prob)
+        
+        save_json(file_name_params,{"params": params, "best_C": best_c,"l1_ratio":l1_ratio})
         save_json(file_name_results, {"cv_pr_auc": cv_pr_auc})
         joblib.dump(model, file_name_model)
         print(f"Fitted on dataset wine_{args.dset}_encoded, params, cv_pr_auc and model.pkl saved for {args.model}")
