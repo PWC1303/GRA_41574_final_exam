@@ -7,7 +7,7 @@ import argparse
 from sklearn.linear_model import LogisticRegression,LogisticRegressionCV
 
 from sklearn.model_selection import train_test_split,RandomizedSearchCV,GridSearchCV
-
+from utils.treshold_tuner import tune_alpha_f1
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
@@ -26,6 +26,7 @@ def main():
     parser = argparse.ArgumentParser(prog='ProgramName',description='What the program does',epilog='Text at the bottom of help')
     parser.add_argument("--model", type=str, default="logm_l1")
     parser.add_argument("--dset", type=str, default="white")
+    parser.add_argument("--drop_ks", action="store_true")
     parser.add_argument("--cv", type = int, default=10, help ="Choose cv")
     parser.add_argument("--svc_type",type=str,default="rbf",   help= "choose between poly and rbf kernel")
     args = parser.parse_args()
@@ -35,8 +36,23 @@ def main():
          data = "red"
     df = pd.read_csv(f"data/wine_{data}_encoded.csv")
     y = np.array(df["lq"])
-    X = np.array(df.drop(columns= ["quality","lq","chlorides","density","sulphates","pH"]))
-    X_tr,X_te,y_tr,y_te = train_test_split(X,y,test_size=0.3,random_state=33)
+
+
+
+    if args.drop_ks is True:
+      X = np.array(df.drop(columns= ["quality","lq","chlorides","density","sulphates","pH"]))
+      
+    else:
+      X = np.array(df.drop(columns= ["quality","lq"]))
+    
+    X_temp,X_te,y_temp,y_te = train_test_split(
+        X, y, test_size=0.2, random_state=33, stratify=y
+    )
+
+    X_tr,X_val,y_tr,y_val = train_test_split(
+        X_temp, y_temp, test_size=0.2, random_state=33, stratify=y_temp
+    )
+
 
 
     #___________Logistic_L1____________________________________________________________________________________
@@ -49,9 +65,19 @@ def main():
         cv_pr_auc = results.scores_[1].mean()
         params = results.get_params()
         best_c = float(results.C_[0])
-        save_json(f"tuning_results/params/{args.dset}_{args.model}_params.json",{"params": params, "best_C": best_c})
-        save_json(f"tuning_results/cv_pr_auc/{args.dset}_{args.model}_cv_pr_auc.json", {"cv_pr_auc": cv_pr_auc})
-        joblib.dump(model, f"tuning_results/models/{args.dset}_{args.model}.pkl")
+        prefix = f"ks_dropped_{args.dset}" if args.drop_ks else args.dset
+
+        file_name_params  = f"tuning_results/params/{prefix}_{args.model}_params.json"
+        file_name_results = f"tuning_results/cv_pr_auc/{prefix}_{args.model}_cv_pr_auc.json"
+        file_name_model   = f"tuning_results/models/{prefix}_{args.model}.pkl"
+
+        y_val_prob = model.predict_proba(X_val)[:, 1]
+        alpha_opt, metrics = tune_alpha_f1(y_val, y_val_prob)
+        print("best_alpha:", alpha_opt)
+        print("Metrics at best alpha:", metrics)
+        save_json(file_name_params,{"params": params, "best_C": best_c,"best_alpha":alpha_opt})
+        save_json(file_name_results, {"cv_pr_auc": cv_pr_auc})
+        joblib.dump(model, file_name_model)
         print(f"Fitted on dataset wine_{args.dset}_encoded, params, cv_pr_auc and model.pkl saved for {args.model}")
 
 
@@ -65,10 +91,20 @@ def main():
         cv_pr_auc = results.scores_[1].mean()
         params = results.get_params()
         best_c = float(results.C_[0])
-        
-        save_json(f"tuning_results/params/{args.dset}_{args.model}_params.json",{"params": params, "best_C": best_c})
-        save_json(f"tuning_results/cv_pr_auc/{args.dset}_{args.model}_cv_pr_auc.json", {"cv_pr_auc": cv_pr_auc})
-        joblib.dump(model, f"tuning_results/models/{args.dset}_{args.model}.pkl")
+
+        prefix = f"ks_dropped_{args.dset}" if args.drop_ks else args.dset
+
+        file_name_params  = f"tuning_results/params/{prefix}_{args.model}_params.json"
+        file_name_results = f"tuning_results/cv_pr_auc/{prefix}_{args.model}_cv_pr_auc.json"
+        file_name_model   = f"tuning_results/models/{prefix}_{args.model}.pkl"
+      
+        y_val_prob = model.predict_proba(X_val)[:, 1]
+        alpha_opt, metrics = tune_alpha_f1(y_val, y_val_prob)
+        print("best_alpha:", alpha_opt)
+        print("Metrics at best alpha:", metrics)
+        save_json(file_name_params,{"params": params, "best_C": best_c,"best_alpha":alpha_opt})
+        save_json(file_name_results, {"cv_pr_auc": cv_pr_auc})
+        joblib.dump(model, file_name_model)
         print(f"Fitted on dataset wine_{args.dset}_encoded, params, cv_pr_auc and model.pkl saved for {args.model}")
 
 
@@ -84,192 +120,23 @@ def main():
         params = results.get_params()
         best_c = float(results.C_[0])
         l1_ratio = float(results.l1_ratio_[0])
-        save_json(f"tuning_results/params/{args.dset}_{args.model}_params.json",
-          {"params": params, "best_C": best_c,"l1_ratio":l1_ratio})
-        save_json(f"tuning_results/cv_pr_auc/{args.dset}_{args.model}_cv_pr_auc.json", {"cv_pr_auc": cv_pr_auc})
-        joblib.dump(model, f"tuning_results/models/{args.dset}_{args.model}.pkl")
+
+
+        prefix = f"ks_dropped_{args.dset}" if args.drop_ks else args.dset
+        file_name_params  = f"tuning_results/params/{prefix}_{args.model}_params.json"
+        file_name_results = f"tuning_results/cv_pr_auc/{prefix}_{args.model}_cv_pr_auc.json"
+        file_name_model   = f"tuning_results/models/{prefix}_{args.model}.pkl"
+        y_val_prob = model.predict_proba(X_val)[:, 1]
+        alpha_opt, metrics = tune_alpha_f1(y_val, y_val_prob)
+        print("best_alpha:", alpha_opt)
+        print("Metrics at best alpha:", metrics)
+        save_json(file_name_params,{"params": params, "best_C": best_c,"l1_ratio":l1_ratio,"best_alpha":alpha_opt})
+        save_json(file_name_results, {"cv_pr_auc": cv_pr_auc})
+        joblib.dump(model, file_name_model)
         print(f"Fitted on dataset wine_{args.dset}_encoded, params, cv_pr_auc and model.pkl saved for {args.model}")
 
-    if args.model =="rfc":
-          param_grid = {
-                  "n_estimators":      [100, 200, 400],
-                  "max_depth":         [3, 5, 7, 9, None],
-                  "min_samples_leaf":  [2, 4, 8],
-                  "min_samples_split": [5, 10],
-                  "max_samples":       [0.6, 0.8, None],
-                  "bootstrap":         [True],
-                  "class_weight":      ["balanced"],
-                  "max_features":      ["sqrt", 0.1, 0.25, 0.5]
-              }
-
-
-
-          rfc = RandomForestClassifier(n_jobs=-1,random_state=33)
-          model = GridSearchCV(
-          estimator=rfc,
-          param_grid=param_grid,
-          cv=3,
-          scoring="average_precision",   
-          verbose=2,
-          n_jobs=-1,)
-          model.fit(X_tr,y_tr)
-          params = model.best_params_
-          cv_pr_auc = model.best_score_
-          save_json(f"tuning_results/params/{args.dset}_{args.model}_params.json",
-            {"params": params})
-          save_json(f"tuning_results/cv_pr_auc/{args.dset}_{args.model}_cv_pr_auc.json", {"cv_pr_auc": cv_pr_auc})
-          joblib.dump(model.best_estimator_, f"tuning_results/models/{args.dset}_{args.model}.pkl")
-          print(f"Fitted on dataset wine_{args.dset}_encoded, params, cv_pr_auc and model.pkl saved for {args.model}")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    #___________SVC______________________________________________________________________________________-
-    if args.model =="svc":
-        svc = SVC(probability=True,class_weight="balanced")
-        model = make_pipeline(StandardScaler(),svc)
-        if args.svc_type == "poly":
-            with open("tuning_results/param_dist/svc_param_dist_poly.json", "r") as f:
-                param_dist = json.load(f)
-
-        if args.svc_type == "rbf":
-            with open("tuning_results/param_dist/svc_param_dist_rbf.json", "r") as f:
-                param_dist = json.load(f)
-
-      
-        grid_search = GridSearchCV(
-              estimator=model,
-              param_distributions=param_dist,  
-              cv=3,
-              scoring="average_precision",
-              n_jobs=-1,
-              verbose=2)
-
-        grid_search.fit(X_tr,y_tr)
-
-        params = grid_search.best_params_
-        cv_pr_auc = grid_search.best_score_
-        
-
-        save_json(f"tuning_results/params/{args.model}_{args.svc_type}_params.json",
-          {"params": params})
-        save_json(f"tuning_results/cv_pr_auc/{args.model}_{args.svc_type}_cv_pr_auc.json", {"cv_pr_auc": cv_pr_auc})
-        joblib.dump(grid_search.best_estimator_, f"tuning_results/models/{args.model}.pkl")
-        print(f"params, cv_pr_auc and model.pkl saved for {args.model}_type_{args.svc_type} ")
-    #____________Random_Forest__________________________________________________________________________________________
-    if args.model =="rfc":
-      param_dist = {
-        "n_estimators":      [300, 400],
-        "max_depth":         [None, 6, 12],
-        "min_samples_leaf":  [1, 2, 4],
-        "min_samples_split": [2, 5, 10],
-        "max_samples": [0.6, 0.8, None],
-        "bootstrap": [True],
-        "class_weight": [ "balanced",None],
-        "max_features":      ["sqrt",None] 
-    }
-
-      rfc = RandomForestClassifier(n_jobs=-1,random_state=33)
-      grid_search = GridSearchCV(
-      estimator=rfc,
-      param_grid=param_dist,
-      cv=3,
-      scoring="average_precision",   
-      verbose=2,
-      n_jobs=-1,)
-      grid_search.fit(X_tr,y_tr)
-      params = grid_search.best_params_
-      cv_pr_auc = grid_search.best_score_
-      save_json(f"tuning_results/params/{args.model}_params.json",
-        {"params": params})
-      save_json(f"tuning_results/cv_pr_auc/{args.model}_cv_pr_auc.json", {"cv_pr_auc": cv_pr_auc})
-      joblib.dump(grid_search.best_estimator_, f"tuning_results/models/{args.model}.pkl")
-      print(f"params, cv_pr_auc and model.pkl saved for {args.model}")
 if __name__ == "__main__":
     main()
-       
-        
-
 
 
 

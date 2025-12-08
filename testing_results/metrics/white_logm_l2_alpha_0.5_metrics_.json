@@ -1,1 +1,1 @@
-{"alpha": 0.5, "test_recall": 0.7735849056603774, "testing_accuracy": 0.6476190476190476, "test_roc_auc": 0.7757819469780696, "test_precision": 0.07495429616087751, "test_f1": 0.13666666666666666, "test_confusion_matrix": [[911, 506], [12, 41]]}
+{"alpha": 0.5, "test_recall": 0.7837837837837838, "testing_accuracy": 0.6163265306122448, "test_roc_auc": 0.7808030724255538, "test_precision": 0.07304785894206549, "test_f1": 0.1336405529953917, "test_confusion_matrix": [[575, 368], [8, 29]]}

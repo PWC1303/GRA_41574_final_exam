@@ -49,6 +49,7 @@ def main():
 
     df["lq"] = np.where((df["quality"] == 3) | (df["quality"] == 4),1,0)
     print(df["quality"].value_counts())
+    print((df["lq"] == 1).sum())
     df.to_csv("data/wine_white_encoded.csv",index=False)
 
 

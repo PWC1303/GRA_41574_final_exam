@@ -15,38 +15,34 @@ from sklearn.metrics import accuracy_score,roc_auc_score,f1_score,precision_scor
 import json
 import json
 
-def save_json(fname,obj):
-         with open(fname, "w") as f:
-                json.dump(obj,f)
+
 
 
 def main():
-    def save_json(fname,obj):
-         with open(fname, "w") as f:
-                json.dump(obj,f)
+ 
     parser = argparse.ArgumentParser(prog='ProgramName',description='What the program does',epilog='Text at the bottom of help')
     parser.add_argument("--model", type=str, default="logistic")
     parser.add_argument("--dset", type=str, default="white")
-
+    parser.add_argument("--drop_ks", action="store_true")
     parser.add_argument("--alpha", type = float, default= 0.5, help= "Alpha sets the the prediction threhsolds")
     args = parser.parse_args()
     df = pd.read_csv(f"data/wine_{args.dset}_encoded.csv")
     y = np.array(df["lq"])
     X = np.array(df.drop(columns= ["quality","lq","chlorides","density","sulphates","pH"]))
-    X_tr,X_te,y_tr,y_te = train_test_split(X,y,test_size=0.3,random_state=33)
+    
 
+    if args.drop_ks is True:
+        X = np.array(df.drop(columns= ["quality","lq","chlorides","density","sulphates","pH"]))
+        model = joblib.load(f"tuning_results/models/ks_dropped_{args.dset}_{args.model}.pkl")
 
+    else:
+        X = np.array(df.drop(columns= ["quality","lq"]))
+        model = joblib.load(f"tuning_results/models/{args.dset}_{args.model}.pkl")
+    
 
-
-    model = joblib.load(f"tuning_results/models/{args.dset}_{args.model}.pkl")
+    X_tr,X_te,y_tr,y_te = train_test_split(X,y,test_size=0.2,random_state=3,stratify=y)
     yhat_prob= model.predict_proba(X_te)[:,1]
-    model_tester(y_te,yhat_prob,args.model,args.alpha,args.dset)
-
-       
-        
-
-    
-    
+    model_tester(y_te,yhat_prob,args.model,args.alpha,args.dset,args.drop_ks)
 
 if __name__ == "__main__":
     main()
