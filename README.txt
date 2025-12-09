@@ -28,9 +28,6 @@ Argument	                    Default	            Description
 
 
 
-
-ist Data for training/testing to folder \data   Subclass of DataLoader
-
 Helper programs
 -----------------------------------------------------------------------------------------------------------
 Name                Purpose                              
