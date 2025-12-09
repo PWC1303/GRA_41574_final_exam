@@ -24,8 +24,8 @@ def save_json(fname,obj):
 
 
 def main():
-    parser = argparse.ArgumentParser(prog='ProgramName',description='What the program does',epilog='Text at the bottom of help')
-    parser.add_argument("--model", type=str, default="logm_l1")
+    parser = argparse.ArgumentParser(prog='tune.py',description='Upon user request the program will tune a model and plot helper threshold curves')
+    parser.add_argument("--model", type=str, default="logm_l1", help="Chose model type from logm_l1, logm_l2 and rfc")
     parser.add_argument("--dset", type=str, default="white")
     parser.add_argument("--cv", type = int, default=10, help ="Choose cv")
     args = parser.parse_args()
@@ -97,41 +97,6 @@ def main():
         joblib.dump(model, file_name_model)
         print(f"Fitted on dataset wine_{args.dset}_encoded, params, cv_pr_auc and model.pkl saved for {args.model}")
 
-
-    #___________Logistic_Elastic_Net____________________________________________________________________________________    
-    if args.model == "logm_ela":
-        logm_ela = LogisticRegressionCV(penalty="elasticnet",solver="saga",
-                                l1_ratios=[x for x in np.linspace(0,1,10)],cv =args.cv,scoring="average_precision", class_weight= "balanced",
-                                max_iter=1000,random_state=33,verbose =1)
-        model =make_pipeline(StandardScaler(),logm_ela)
-        model.fit(X_tr,y_tr)
-        results = model.named_steps["logisticregressioncv"]
-        cv_pr_auc = results.scores_[1].mean()
-        params = results.get_params()
-        best_c = float(results.C_[0])
-        l1_ratio = float(results.l1_ratio_[0])
-
-
-        
-        file_name_params  = f"tuning_results/params/{args.dset}_{args.model}_params.json"
-        file_name_results = f"tuning_results/cv_pr_auc/{args.dset}_{args.model}_cv_pr_auc.json"
-        file_name_model   = f"tuning_results/models/{args.dset}_{args.model}.pkl"
-        y_val_prob = model.predict_proba(X_val)[:, 1]
-        
-        
-        plot_accuracy_vs_threshold(args.model,y_val,y_val_prob)
-        plot_recall_vs_threshold(args.model,y_val,y_val_prob)
-        plot_recall_accuracy(args.model,y_val,y_val_prob)
-        
-        save_json(file_name_params,{"params": params, "best_C": best_c,"l1_ratio":l1_ratio})
-        save_json(file_name_results, {"cv_pr_auc": cv_pr_auc})
-        joblib.dump(model, file_name_model)
-        print(f"Fitted on dataset wine_{args.dset}_encoded, params, cv_pr_auc and model.pkl saved for {args.model}")
-
-
-
-
-        
       #___________________RANDOM FOREST CLASSIFIER
         
 

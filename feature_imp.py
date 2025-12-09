@@ -55,6 +55,8 @@ def main():
         fig.tight_layout()
         fig.savefig("figs/rfc_feature_imp")
 
+        print(forest_importances)
+
     if args.model.startswith("logm"):
             
         coefs = model[-1].coef_.ravel()
@@ -78,6 +80,16 @@ def main():
         ax.set_ylabel(r"$|\hat{\beta}|$")
         fig.tight_layout()
         fig.savefig(f"figs/{args.model}_feature_imp")
+        logm_importance = (
+            pd.DataFrame({
+                "feature": X.columns,
+                "abs_importance": coefs
+            })
+            .set_index("feature")
+            .sort_values(by="abs_importance", ascending=False)
+        )
+        print("Now printing coefs with the sign for intepretation")
+        print(logm_importance)
 
     
 

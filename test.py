@@ -1,26 +1,16 @@
 
 import numpy as np 
 import pandas as pd
-import json
+from sklearn.model_selection import train_test_split
+import argparse
 import joblib
 from utils.model_tester import model_tester
-
-import argparse
-from sklearn.linear_model import LogisticRegression,LogisticRegressionCV
-
-from sklearn.model_selection import train_test_split,RandomizedSearchCV,GridSearchCV
-from sklearn.pipeline import make_pipeline
-from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import accuracy_score,roc_auc_score,f1_score,precision_score,confusion_matrix,roc_curve
-import json
-import json
-
 
 
 
 def main():
  
-    parser = argparse.ArgumentParser(prog='ProgramName',description='What the program does',epilog='Text at the bottom of help')
+    parser = argparse.ArgumentParser(prog='test.py',description='Program tests the trained models using a helper tester function',epilog='Text at the bottom of help')
     parser.add_argument("--model", type=str, default="logistic")
     parser.add_argument("--dset", type=str, default="white")
     parser.add_argument("--alpha", type = float, default= 0.5, help= "Alpha sets the the prediction threhsolds")
