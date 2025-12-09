@@ -1,1 +1,1 @@
-{"alpha": 0.5, "test_recall": 0.7837837837837838, "testing_accuracy": 0.6163265306122448, "test_roc_auc": 0.7808030724255538, "test_precision": 0.07304785894206549, "test_f1": 0.1336405529953917, "test_confusion_matrix": [[575, 368], [8, 29]]}
+{"alpha": 0.5, "test_recall": 0.8918918918918919, "testing_accuracy": 0.6061224489795919, "test_pr_auc": 0.22347466732049648, "test_roc_auc": 0.8446590811384024, "test_precision": 0.07951807228915662, "test_f1": 0.14601769911504425, "test_confusion_matrix": [[561, 382], [4, 33]]}

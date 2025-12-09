@@ -1,7 +1,0 @@
-{
-    "svc__kernel": ["poly"],
-    "svc__C": [1e-2, 1e-1, 1,10],
-    "svc__gamma": [0.01, 0.1,1],
-    "svc__degree": [2,3],
-    "svc__coef0": [0, 1]
-}
